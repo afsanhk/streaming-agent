@@ -39,11 +39,13 @@ export default function AgentOutputPanel() {
       </div>
 
       <div className="agent-panel-output">
-        {/* TODO: connecting skeleton */}
+        {status && status ==="connecting" &&
+          <div className="skeleton">
+            <div className="skeleton-line"/>
+          </div>}
 
-        {/* TODO: token output + blinking cursor */}
+        {tokens && <div>{tokens}<span className="cursor"/></div>}
 
-        {/* TODO: error message */}
         {errorMsg && <div className="error-msg">{errorMsg}</div>}
       </div>
 

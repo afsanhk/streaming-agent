@@ -47,31 +47,31 @@ export function useAgentStream() {
     }
   }, [])
   const start = useCallback(() => {
-    // TODO: close any existing connection first
+    // close any existing connection first
     if (sourceRef && sourceRef.current) {
       sourceRef.current.close()
       sourceRef.current = null
     }
-    // TODO: set status to "connecting"
+    // set status to "connecting"
     setStatus("connecting")
-    // TODO: create a new EventSource(STREAM_URL)
+    // create a new EventSource(STREAM_URL)
     const evtSource = new EventSource(STREAM_URL);
     sourceRef.current = evtSource
-    // TODO: listen for "token" events → append to tokens, set status "streaming"
+    // listen for "token" events → append to tokens, set status "streaming"
     evtSource.addEventListener('token', function(event) {
       const data = JSON.parse(event.data);
       console.log("Update received: ", data);
       setTokens(prev => prev + data.token)
       setStatus("streaming")
     });
-    // TODO: listen for "done" events → close source, set status "done"
+    // listen for "done" events → close source, set status "done"
     evtSource.addEventListener('done', function() {
       sourceRef.current?.close()
       sourceRef.current = null
       console.log("Done!");
       setStatus("done")
     });
-    // TODO: listen for "error" events → close source, set errorMsg, set status "error"
+    // listen for "error" events → close source, set errorMsg, set status "error"
     evtSource.addEventListener("error", function(event) {
       const data = JSON.parse(event.data)
       setStatus("error")
@@ -79,7 +79,7 @@ export function useAgentStream() {
       sourceRef.current?.close()
       sourceRef.current = null
     });
-    // TODO: handle the built-in onerror (connection drop) separately from the custom "error" event
+    // handle the built-in onerror (connection drop) separately from the custom "error" event
     evtSource.onerror = function() {
       setStatus("error")
       setErrorMsg("Connection lost")  // no event.data here
@@ -89,7 +89,7 @@ export function useAgentStream() {
   }, []);
 
   const reset = useCallback(() => {
-    // TODO: close any open connection, clear tokens, reset status to "idle"
+    // close any open connection, clear tokens, reset status to "idle"
     sourceRef?.current?.close()
     sourceRef.current = null
 
