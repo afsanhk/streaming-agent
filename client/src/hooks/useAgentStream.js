@@ -73,7 +73,8 @@ export function useAgentStream() {
     });
     // listen for "error" events → close source, set errorMsg, set status "error"
     evtSource.addEventListener("error", function(event) {
-      const data = JSON.parse(event.data)
+      if (!event.data) return; // browser connection close, let onerror handle it
+      const data = JSON.parse(event.data);
       setStatus("error")
       setErrorMsg(data.message)
       sourceRef.current?.close()

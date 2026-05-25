@@ -44,7 +44,10 @@ export default function AgentOutputPanel() {
             <div className="skeleton-line"/>
           </div>}
 
-        {tokens && <div>{tokens}<span className="cursor"/></div>}
+        {tokens &&
+          <div>{tokens}
+            {status ==="streaming" && <span className="cursor"/>}
+          </div>}
 
         {errorMsg && <div className="error-msg">{errorMsg}</div>}
       </div>
