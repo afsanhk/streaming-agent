@@ -40,13 +40,23 @@ export function useAgentStream() {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const sourceRef = useRef(null);
+
+  // For requestAnimationFrame implementation
+  const tokenBufferRef = useRef([]);
+  const rafRef = useRef(null);
+
   useEffect(() => {
     return () => {
       sourceRef.current?.close()
       sourceRef.current = null
+
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      tokenBufferRef.current = [];
     }
   }, [])
   const start = useCallback((scenario) => {
+    const url = scenario ? `${STREAM_URL}?scenario=${scenario}` : STREAM_URL;
     // close any existing connection first
     if (sourceRef && sourceRef.current) {
       sourceRef.current.close()
@@ -54,25 +64,31 @@ export function useAgentStream() {
     }
     // set status to "connecting"
     setStatus("connecting")
-    if (scenario) {
-      STREAM_URL +=`?scenario=${scenario}`
-    }
     // create a new EventSource(STREAM_URL)
-    const evtSource = new EventSource(STREAM_URL);
+    const evtSource = new EventSource(url);
     sourceRef.current = evtSource
+
     // listen for "token" events → append to tokens, set status "streaming"
-    evtSource.addEventListener('token', function(event) {
-      const data = JSON.parse(event.data);
-      console.log("Update received: ", data);
-      setTokens(prev => prev + data.token)
+    evtSource.addEventListener("token", function(event) {
       setStatus("streaming")
+      const data = JSON.parse(event.data);
+      tokenBufferRef.current.push(data.token);
+
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        const batch = tokenBufferRef.current.splice(0); // drain without clearing ref
+        setTokens(prev => prev + batch.join(""));
+        rafRef.current = null;
+      });
     });
     // listen for "done" events → close source, set status "done"
     evtSource.addEventListener('done', function() {
       sourceRef.current?.close()
       sourceRef.current = null
-      console.log("Done!");
       setStatus("done")
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      tokenBufferRef.current = [];
     });
     // listen for "error" events → close source, set errorMsg, set status "error"
     evtSource.addEventListener("error", function(event) {
@@ -82,6 +98,9 @@ export function useAgentStream() {
       setErrorMsg(data.message)
       sourceRef.current?.close()
       sourceRef.current = null
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      tokenBufferRef.current = [];
     });
     // handle the built-in onerror (connection drop) separately from the custom "error" event
     evtSource.onerror = function() {
@@ -89,6 +108,9 @@ export function useAgentStream() {
       setErrorMsg("Connection lost")  // no event.data here
       sourceRef.current?.close()
       sourceRef.current = null
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      tokenBufferRef.current = [];
     };
   }, []);
 
@@ -96,6 +118,10 @@ export function useAgentStream() {
     // close any open connection, clear tokens, reset status to "idle"
     sourceRef?.current?.close()
     sourceRef.current = null
+
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = null;
+    tokenBufferRef.current = [];
 
     setTokens("")
     setStatus("idle")

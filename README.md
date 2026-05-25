@@ -48,5 +48,5 @@ npm create vite@latest client -- --template react
 
 ## Stretch Goals
 - Add a `?scenario=` query param so the user can select different responses ✅
-- Batch token updates with `requestAnimationFrame` to avoid a re-render per token
-- Simulate the backend going down mid-stream by setting `SIMULATE_FAILURE = true` in `server/src/routes/stream.js` ✅ (manually changeable)
+- Batch token updates with `requestAnimationFrame` to avoid a re-render per token ✅
+- Simulate the backend going down mid-stream by setting `SIMULATE_FAILURE = true` in `server/src/routes/stream.js` (manually changeable) ✅
