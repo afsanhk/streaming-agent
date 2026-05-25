@@ -32,7 +32,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
  *   - Batch token appends with requestAnimationFrame instead of setting state on every token
  */
 
-const STREAM_URL = "/api/stream";
+let STREAM_URL = "/api/stream";
 
 export function useAgentStream() {
   const [tokens, setTokens] = useState("");
@@ -46,7 +46,7 @@ export function useAgentStream() {
       sourceRef.current = null
     }
   }, [])
-  const start = useCallback(() => {
+  const start = useCallback((scenario) => {
     // close any existing connection first
     if (sourceRef && sourceRef.current) {
       sourceRef.current.close()
@@ -54,6 +54,9 @@ export function useAgentStream() {
     }
     // set status to "connecting"
     setStatus("connecting")
+    if (scenario) {
+      STREAM_URL +=`?scenario=${scenario}`
+    }
     // create a new EventSource(STREAM_URL)
     const evtSource = new EventSource(STREAM_URL);
     sourceRef.current = evtSource

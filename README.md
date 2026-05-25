@@ -1,4 +1,4 @@
-# Problem 01 — Streaming Agent Output Panel
+# Streaming Agent Output Panel
 
 ## Goal
 Build a frontend UI that connects to the SSE endpoint below and renders an AI

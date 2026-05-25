@@ -54,6 +54,7 @@ export default function AgentOutputPanel() {
 
       <div className="agent-panel-actions">
         <button onClick={() => start()}>Run Agent</button>
+        <button onClick={() => start("error")}>Simulate Error</button>
         <button onClick={() => start()}>Reconnect</button>
         <button onClick={() => reset()}>Reset Agent</button>
       </div>
