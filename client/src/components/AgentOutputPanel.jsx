@@ -44,16 +44,13 @@ export default function AgentOutputPanel() {
         {/* TODO: token output + blinking cursor */}
 
         {/* TODO: error message */}
+        {errorMsg && <div className="error-msg">{errorMsg}</div>}
       </div>
 
       <div className="agent-panel-actions">
-        {/* TODO: Run Agent button */}
         <button onClick={() => start()}>Run Agent</button>
-        {/* TODO: Reconnect button (only on error) */}
         <button onClick={() => start()}>Reconnect</button>
-        {/* TODO: Reset button (on done or error) */}
         <button onClick={() => reset()}>Reset Agent</button>
-
       </div>
     </div>
   );
