@@ -2,9 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 
 /**
  * useAgentStream
- * ──────────────
- * YOUR TASK: implement this hook so that AgentOutputPanel can consume it.
- *
+ * ────────────── *
  * It should manage the full SSE lifecycle:
  *   - Opening an EventSource connection to /api/stream
  *   - Appending tokens as they arrive
@@ -23,11 +21,11 @@ import { useState, useRef, useCallback, useEffect } from "react";
  * }
  *
  * HINTS:
- *   - Use a ref for the EventSource instance so closing it doesn't trigger re-renders
- *   - Listen for "token", "done", and "error" event types (not the generic "message" event)
- *   - The server sends JSON in each event's data field — remember to JSON.parse it
- *   - Close and null the EventSource ref in your cleanup / on error / on done
- *   - useCallback on `start` and `reset` so consumers don't re-render unnecessarily
+ *   - Use a ref for the EventSource instance so closing it doesn't trigger re-renders ✅
+ *   - Listen for "token", "done", and "error" event types (not the generic "message" event) ✅
+ *   - The server sends JSON in each event's data field — remember to JSON.parse it ✅
+ *   - Close and null the EventSource ref in your cleanup / on error / on done ✅
+ *   - useCallback on `start` and `reset` so consumers don't re-render unnecessarily ✅
  *
  * STRETCH:
  *   - Accept a `scenario` param and append ?scenario=error to the URL

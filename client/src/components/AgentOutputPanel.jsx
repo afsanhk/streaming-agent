@@ -35,7 +35,6 @@ export default function AgentOutputPanel() {
     <div className="agent-panel">
       <div className="agent-panel-header">
         <h1>Agent Output</h1>
-        {/* TODO: status badge */}
         <div className={`status-badge ${status}`}>{status.toUpperCase()}</div>
       </div>
 
