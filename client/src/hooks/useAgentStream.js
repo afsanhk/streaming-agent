@@ -28,7 +28,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
  *   - useCallback on `start` and `reset` so consumers don't re-render unnecessarily ✅
  *
  * STRETCH:
- *   - Accept a `scenario` param and append ?scenario=error to the URL
+ *   - Accept a `scenario` param and append ?scenario=error to the URL ✅
  *   - Batch token appends with requestAnimationFrame instead of setting state on every token
  */
 
